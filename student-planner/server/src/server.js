@@ -15,8 +15,23 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 
 // CORS configuration
+const allowedOrigins = [
+  process.env.CORS_ORIGIN,
+  'http://localhost:5173',
+  'http://localhost:5000'
+].filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 };
 app.use(cors(corsOptions));
