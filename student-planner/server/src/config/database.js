@@ -1,11 +1,23 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 
-const dbDialect = process.env.DB_DIALECT || 'sqlite';
-
 let sequelize;
 
-if (dbDialect === 'mysql') {
+// For Render/production with PostgreSQL
+if (process.env.DATABASE_URL) {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        },
+        logging: false,
+    });
+} 
+// For MySQL
+else if (process.env.DB_DIALECT === 'mysql') {
     sequelize = new Sequelize(
         process.env.DB_NAME,
         process.env.DB_USER,
@@ -16,7 +28,9 @@ if (dbDialect === 'mysql') {
             logging: false,
         }
     );
-} else {
+} 
+// Default to SQLite for local development
+else {
     sequelize = new Sequelize({
         dialect: 'sqlite',
         storage: path.join(__dirname, '../../database.sqlite'),

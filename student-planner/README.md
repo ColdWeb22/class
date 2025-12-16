@@ -1,4 +1,4 @@
-# Student Planner
+Student Planner
 
 A comprehensive academic planning and tracking application built with React and Express.
 
@@ -115,6 +115,46 @@ npm run dev
 The application will be available at:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:5000
+
+## 🚀 Deploy to Render
+
+Deploy your app for free on Render with automatic HTTPS and PostgreSQL database:
+
+### Quick Deploy
+
+1. **Push to GitHub:**
+   ```bash
+   git add .
+   git commit -m "Ready for Render deployment"
+   git push
+   ```
+
+2. **Connect to Render:**
+   - Go to [render.com](https://render.com) and sign up/login with GitHub
+   - Click "New +" → "Blueprint"
+   - Connect your repository
+   - Render will auto-detect `render.yaml` and deploy both services!
+
+3. **That's it!** Render will:
+   - Deploy backend API
+   - Deploy frontend static site
+   - Create free PostgreSQL database
+   - Auto-generate JWT secret
+   - Set up HTTPS URLs
+
+### What You Get
+- ✅ Free PostgreSQL database (automatic backups)
+- ✅ Automatic HTTPS
+- ✅ Auto-deploy on git push
+- ✅ Environment variables managed
+- ✅ Zero configuration needed
+
+### Custom Configuration
+
+If you need to customize, edit [`render.yaml`](render.yaml):
+- Change region (oregon, frankfurt, singapore, ohio)
+- Update service names
+- Modify build/start commands
 
 ## Project Structure
 

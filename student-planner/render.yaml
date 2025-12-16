@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: student-planner-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: DATABASE_URL
+        fromDatabase:
+          name: student-planner-db
+          property: connectionString
+
+  - type: web
+    name: student-planner-client
+    env: static
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://student-planner-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://student-planner-api.onrender.com/api/*
+
+databases:
+  - name: student-planner-db
+    plan: free
+    databaseName: student_planner
+    user: student_planner_user
