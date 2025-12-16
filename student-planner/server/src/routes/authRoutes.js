@@ -26,18 +26,35 @@ const strictAuthLimiter = rateLimit({
 router.post('/register', authLimiter, registerValidation, register);
 router.post('/login', strictAuthLimiter, loginValidation, login);
 
-// Google OAuth routes
-router.get('/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+// Google OAuth routes - only enable if Google OAuth is configured
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  router.get('/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+  );
 
-router.get('/google/callback',
-  passport.authenticate('google', { 
-    failureRedirect: '/login',
-    session: false 
-  }),
-  googleCallback
-);
+  router.get('/google/callback',
+    passport.authenticate('google', { 
+      failureRedirect: '/login',
+      session: false 
+    }),
+    googleCallback
+  );
+} else {
+  // Return error message if Google OAuth is not configured
+  router.get('/google', (req, res) => {
+    res.status(503).json({ 
+      success: false, 
+      error: 'Google authentication is not configured on this server.' 
+    });
+  });
+  
+  router.get('/google/callback', (req, res) => {
+    res.status(503).json({ 
+      success: false, 
+      error: 'Google authentication is not configured on this server.' 
+    });
+  });
+}
 
 router.get('/profile', protect, getProfile);
 router.put('/profile', protect, updateProfile);
