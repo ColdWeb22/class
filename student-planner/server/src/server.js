@@ -45,8 +45,8 @@ const corsOptions = {
 // Apply CORS before any other middleware
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
+// Handle preflight requests explicitly for all routes
+app.options('/*', cors(corsOptions));
 
 // Security middleware
 app.use(helmet({
