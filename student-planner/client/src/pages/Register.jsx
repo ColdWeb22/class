@@ -22,7 +22,7 @@ const Register = () => {
       <div className="glass-panel p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Create Account</h1>
-          <p className="text-text-muted">Join Student Planner with Google</p>
+          <p className="text-text-muted">Join Study Planner with Google</p>
         </div>
 
         <div className="space-y-4">

@@ -34,7 +34,7 @@ const GradeAnalyzer = () => {
 
         if (format === 'txt') {
             let report = `
-Student Planner - Grade Analysis Report
+Study Planner - Grade Analysis Report
 ---------------------------------------
 Target Semester GPA: ${targetGPA}
 

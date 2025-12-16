@@ -57,7 +57,7 @@ const Dashboard = () => {
   if (!isAuthenticated) {
     return (
       <div className="max-w-4xl mx-auto text-center py-16">
-        <h2 className="text-3xl font-bold mb-4">Welcome to Student Planner</h2>
+        <h2 className="text-3xl font-bold mb-4">Welcome to Study Planner</h2>
         <p className="text-text-muted mb-8">Sign in to access your personalized dashboard and track your academic progress</p>
         <Link to="/login" className="btn-primary inline-flex items-center gap-2">
           Get Started

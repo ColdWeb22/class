@@ -129,7 +129,7 @@ const CGPAPlanner = () => {
   const downloadText = () => {
     if (!result) return;
     const report = `
-Student Planner - GPA Requirement Report
+Study Planner - GPA Requirement Report
 ----------------------------------------
 Current CGPA: ${formData.currentCGPA}
 Completed Credits: ${formData.creditsCompleted}

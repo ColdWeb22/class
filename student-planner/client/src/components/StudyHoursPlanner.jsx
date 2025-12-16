@@ -49,7 +49,7 @@ const StudyHoursPlanner = () => {
 
         if (format === 'txt') {
             let report = `
-Student Planner - Study Hours Plan
+Study Planner - Study Hours Plan
 ----------------------------------
 Goal CGPA: ${targetCGPA}
 Total Weekly Study Hours (Adjusted): ${result.adjustedTotalHours}

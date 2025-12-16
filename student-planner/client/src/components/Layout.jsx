@@ -33,11 +33,13 @@ const Layout = ({ children }) => {
             {/* Sidebar */}
             <aside className="w-full md:w-64 bg-surface/80 backdrop-blur-md border-r border-white/10 p-6 flex flex-col">
                 <div className="mb-10 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center font-bold text-white">
-                        SP
-                    </div>
+                    <img 
+                        src="/logo.png" 
+                        alt="Study Planner Logo" 
+                        className="w-10 h-10 rounded-lg object-contain"
+                    />
                     <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-                        Student<br />Planner
+                        Study<br />Planner
                     </h1>
                 </div>
 
@@ -98,7 +100,7 @@ const Layout = ({ children }) => {
                     )}
 
                     <div className="pt-6 border-t border-white/10 text-xs text-text-muted">
-                        &copy; 2025 Student Planner
+                        &copy; 2025 Study Planner
                     </div>
                 </div>
             </aside>

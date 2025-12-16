@@ -7,7 +7,7 @@ export const exportToPDF = (data, filename = 'report.pdf') => {
   
   // Title
   doc.setFontSize(18);
-  doc.text(data.title || 'Student Planner Report', 14, 20);
+  doc.text(data.title || 'Study Planner Report', 14, 20);
   
   // Date
   doc.setFontSize(10);
