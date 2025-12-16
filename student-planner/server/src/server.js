@@ -13,12 +13,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security middleware
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
-
-// CORS configuration
+// CORS configuration - MUST BE FIRST
 const allowedOrigins = [
   process.env.CORS_ORIGIN,
   'http://localhost:5173',
@@ -40,18 +35,31 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  optionsSuccessStatus: 200
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
+
+// Apply CORS before any other middleware
 app.use(cors(corsOptions));
 
-// Rate limiting
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
+
+// Security middleware
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
+}));
+
+// Rate limiting - Skip for OPTIONS requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: { success: false, error: 'Too many requests, please try again later.' }
+  message: { success: false, error: 'Too many requests, please try again later.' },
+  skip: (req) => req.method === 'OPTIONS' // Skip rate limiting for preflight requests
 });
 app.use('/api/', limiter);
 
