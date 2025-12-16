@@ -22,7 +22,6 @@ services:
   - type: web
     name: student-planner-client
     env: static
-    region: oregon
     plan: free
     rootDir: student-planner/client
     buildCommand: npm install && npm run build
