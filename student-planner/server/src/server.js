@@ -2,9 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const session = require('express-session');
 const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
+const passport = require('./config/passport');
 
 dotenv.config();
 
@@ -47,6 +49,21 @@ app.use('/api/', limiter);
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 app.get('/', (req, res) => {

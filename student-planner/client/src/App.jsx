@@ -7,6 +7,7 @@ import { HistoryProvider } from './context/HistoryContext';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import GoogleCallback from './pages/GoogleCallback';
 import Dashboard from './pages/Dashboard';
 import CGPAPlanner from './components/CGPAPlanner';
 import StudyHoursPlanner from './components/StudyHoursPlanner';
@@ -34,6 +35,7 @@ function AppRoutes() {
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
       {/* Main App Routes with Layout */}
       <Route path="/" element={<Layout><CGPAPlanner /></Layout>} />

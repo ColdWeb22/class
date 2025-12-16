@@ -122,9 +122,22 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+// Google OAuth callback
+const googleCallback = async (req, res) => {
+  try {
+    const token = generateToken(req.user.id);
+    // Redirect to frontend with token
+    const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendURL}/auth/google/callback?token=${token}`);
+  } catch (error) {
+    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=authentication_failed`);
+  }
+};
+
 module.exports = {
   register,
   login,
   getProfile,
-  updateProfile
+  updateProfile,
+  googleCallback
 };
