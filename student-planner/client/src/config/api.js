@@ -19,6 +19,15 @@ export const apiClient = {
       const data = await response.json();
 
       if (!response.ok) {
+        // Handle 401 Unauthorized - clear invalid token
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          // Redirect to login if not already there
+          if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+            window.location.href = '/login';
+          }
+        }
         throw new Error(data.error || 'Something went wrong');
       }
 
