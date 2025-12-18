@@ -1,72 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Mail, Lock } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { apiClient } from '../config/api';
-import toast from 'react-hot-toast';
-import { validateEmail } from '../utils/validation';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  const validate = () => {
-    const newErrors = {};
-
-    if (!validateEmail(formData.email)) {
-      newErrors.email = 'Valid email is required';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validate()) return;
-
-    setLoading(true);
-    try {
-      const response = await apiClient.post('/api/auth/login', {
-        email: formData.email,
-        password: formData.password
-      });
-
-      if (response.success) {
-        login(response.data, response.data.token);
-        toast.success('Welcome back!');
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      toast.error(error.message || 'Login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
-    }
-  };
-
   const handleGoogleSignIn = () => {
-    setGoogleLoading(true);
+    setLoading(true);
     window.location.href = `${API_URL}/api/auth/google`;
   };
 
@@ -75,71 +16,16 @@ const Login = () => {
       <div className="glass-panel p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-          <p className="text-text-muted">Sign in to continue your journey</p>
+          <p className="text-text-muted">Sign in to Study Planner with Google</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`input-field pl-10 ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="your@email.com"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-              />
-            </div>
-            {errors.email && <p id="email-error" className="text-red-500 text-sm mt-1">{errors.email}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`input-field pl-10 ${errors.password ? 'border-red-500' : ''}`}
-                placeholder="••••••"
-                aria-invalid={!!errors.password}
-                aria-describedby={errors.password ? 'password-error' : undefined}
-              />
-            </div>
-            {errors.password && <p id="password-error" className="text-red-500 text-sm mt-1">{errors.password}</p>}
-          </div>
-
+        <div className="space-y-4">
           <button
-            type="submit"
+            onClick={handleGoogleSignIn}
             disabled={loading}
-            className="btn-primary w-full flex items-center justify-center gap-2"
+            className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
-            {!loading && <LogIn size={18} />}
-          </button>
-        </form>
-
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
-          </div>
-        </div>
-
-        <button
-          onClick={handleGoogleSignIn}
-          disabled={googleLoading}
-          className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
-        >
-          {googleLoading ? (
+            {loading ? (
             <span>Connecting...</span>
           ) : (
             <>
@@ -166,19 +52,18 @@ const Login = () => {
           )}
         </button>
 
-        <div className="flex flex-col gap-4 mt-6">
-          <p className="text-center text-text-muted">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </p>
-          <p className="text-center text-text-muted">
-            <Link to="/" className="text-primary hover:underline">
-              Continue as guest
-            </Link>
-          </p>
+        <div className="text-center space-y-2 text-sm text-text-muted mt-6">
+          <p>✓ No password needed</p>
+          <p>✓ Secure authentication</p>
+          <p>✓ Quick access to your planner</p>
         </div>
+
+        <p className="text-center mt-6 text-text-muted">
+          Don't have an account?{' '}
+          <Link to="/register" className="text-primary hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );
