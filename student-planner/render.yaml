@@ -42,13 +42,6 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://student-planner-api.onrender.com
-    routes:
-      - type: rewrite
-        source: /api/*
-        destination: https://student-planner-api.onrender.com/api/*
-      - type: rewrite
-        source: /*
-        destination: /index.html
 
 databases:
   - name: student-planner-db
