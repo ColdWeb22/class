@@ -99,6 +99,14 @@ const updateProfile = async (req, res, next) => {
 
     const user = await User.findByPk(req.user.id);
     
+    // Security: Block email changes without verification
+    if (email && email !== user.email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email changes are not supported. Please contact support if you need to update your email.'
+      });
+    }
+    
     if (name) user.name = name;
     if (current_cgpa !== undefined) user.current_cgpa = current_cgpa;
     if (credits_completed !== undefined) user.credits_completed = credits_completed;

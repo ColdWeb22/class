@@ -34,10 +34,12 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Default error
+  // Default error - sanitize in production
+  const isDevelopment = process.env.NODE_ENV === 'development';
   res.status(err.statusCode || 500).json({
     success: false,
-    error: err.message || 'Internal server error'
+    error: isDevelopment ? (err.message || 'Internal server error') : 'Internal server error',
+    ...(isDevelopment && { stack: err.stack })
   });
 };
 

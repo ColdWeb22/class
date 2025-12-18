@@ -51,11 +51,11 @@ const loginValidation = [
 ];
 
 const semesterValidation = [
-  body('name').trim().notEmpty().withMessage('Semester name is required')
+  body('name').trim().escape().notEmpty().withMessage('Semester name is required')
     .isLength({ min: 2, max: 100 }).withMessage('Semester name must be between 2 and 100 characters'),
   body('target_gpa').optional().isFloat({ min: 0, max: 5 }).withMessage('Target GPA must be between 0 and 5'),
   body('courses').optional().isArray().withMessage('Courses must be an array'),
-  body('courses.*.name').optional().trim().notEmpty().withMessage('Course name is required'),
+  body('courses.*.name').optional().trim().escape().notEmpty().withMessage('Course name is required'),
   body('courses.*.units').optional().isInt({ min: 1, max: 10 }).withMessage('Units must be between 1 and 10'),
   body('courses.*.targetGrade').optional().isIn(['A', 'B', 'C', 'D', 'F']).withMessage('Invalid target grade'),
   body('courses.*.actualGrade').optional().isIn(['A', 'B', 'C', 'D', 'F', null]).withMessage('Invalid actual grade'),
@@ -64,7 +64,7 @@ const semesterValidation = [
 ];
 
 const courseValidation = [
-  body('name').trim().notEmpty().withMessage('Course name is required')
+  body('name').trim().escape().notEmpty().withMessage('Course name is required')
     .isLength({ min: 2, max: 100 }).withMessage('Course name must be between 2 and 100 characters'),
   body('units').isInt({ min: 1, max: 10 }).withMessage('Units must be between 1 and 10'),
   body('targetGrade').optional().isIn(['A', 'B', 'C', 'D', 'F']).withMessage('Invalid target grade'),
@@ -74,7 +74,7 @@ const courseValidation = [
 ];
 
 const profileUpdateValidation = [
-  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty')
+  body('name').optional().trim().escape().notEmpty().withMessage('Name cannot be empty')
     .isLength({ min: 2, max: 100 }).withMessage('Name must be between 2 and 100 characters'),
   body('email').optional().isEmail().normalizeEmail().withMessage('Valid email is required'),
   handleValidationErrors
