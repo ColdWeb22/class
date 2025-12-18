@@ -41,7 +41,8 @@ else {
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log(`Database connected (${dbDialect})`);
+        const dialect = sequelize.getDialect();
+        console.log(`Database connected (${dialect})`);
         await sequelize.sync({ alter: true }); // Sync models
     } catch (error) {
         console.error('Unable to connect to the database:', error);
