@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
+const { semesterValidation, courseValidation } = require('../middleware/validation');
 const {
   createSemester,
   getSemesters,
@@ -16,16 +17,16 @@ router.use(protect); // All semester routes require authentication
 
 router.route('/')
   .get(getSemesters)
-  .post(createSemester);
+  .post(semesterValidation, createSemester);
 
 router.route('/:id')
   .get(getSemester)
-  .put(updateSemester)
+  .put(semesterValidation, updateSemester)
   .delete(deleteSemester);
 
-router.post('/:semesterId/courses', addCourse);
+router.post('/:semesterId/courses', courseValidation, addCourse);
 router.route('/courses/:courseId')
-  .put(updateCourse)
+  .put(courseValidation, updateCourse)
   .delete(deleteCourse);
 
 module.exports = router;

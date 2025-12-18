@@ -4,7 +4,7 @@ const passport = require('passport');
 const rateLimit = require('express-rate-limit');
 const { register, login, getProfile, updateProfile, googleCallback } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
-const { registerValidation, loginValidation } = require('../middleware/validation');
+const { registerValidation, loginValidation, profileUpdateValidation } = require('../middleware/validation');
 
 // Rate limiting for auth routes
 const authLimiter = rateLimit({
@@ -57,6 +57,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 }
 
 router.get('/profile', protect, getProfile);
-router.put('/profile', protect, updateProfile);
+router.put('/profile', protect, profileUpdateValidation, updateProfile);
 
 module.exports = router;
