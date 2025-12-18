@@ -95,7 +95,7 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    const { name, current_cgpa, credits_completed, target_cgpa } = req.body;
+    const { name, email, current_cgpa, credits_completed, target_cgpa } = req.body;
 
     const user = await User.findByPk(req.user.id);
     
