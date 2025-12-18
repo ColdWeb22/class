@@ -7,11 +7,11 @@ import { apiClient } from '../config/api';
 const GoogleCallback = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleCallback = async () => {
-      const token = searchParams.get('token');
+      const token = searchParams.get('token') || searchParams.get('googleToken');
       const error = searchParams.get('error');
 
       if (error) {
@@ -41,14 +41,17 @@ const GoogleCallback = () => {
           localStorage.removeItem('token');
           navigate('/login');
         }
+      } else if (isAuthenticated) {
+        // Already authenticated, go to dashboard
+        navigate('/dashboard');
       } else {
-        toast.error('No authentication token received');
-        navigate('/login');
+        // No token and not authenticated, show home page (CGPA Planner)
+        navigate('/planner/gpa');
       }
     };
 
     handleCallback();
-  }, [searchParams, navigate, login]);
+  }, [searchParams, navigate, login, isAuthenticated]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">

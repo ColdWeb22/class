@@ -38,7 +38,7 @@ function AppRoutes() {
       <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
       {/* Main App Routes with Layout */}
-      <Route path="/" element={<Layout><CGPAPlanner /></Layout>} />
+      <Route path="/" element={<GoogleCallback />} />
       <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
       <Route path="/semesters" element={<ProtectedRoute><Layout><Semesters /></Layout></ProtectedRoute>} />

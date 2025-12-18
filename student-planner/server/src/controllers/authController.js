@@ -128,7 +128,7 @@ const googleCallback = async (req, res) => {
     const token = generateToken(req.user.id);
     // Redirect to frontend with token
     const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
-    res.redirect(`${frontendURL}/auth/google/callback?token=${token}`);
+    res.redirect(`${frontendURL}/?googleToken=${token}`);
   } catch (error) {
     res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=authentication_failed`);
   }
