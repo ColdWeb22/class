@@ -31,16 +31,22 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
         proxy: true,
       },
       async (accessToken, refreshToken, profile, done) => {
-
         try {
+          console.log('🔹 Google Callback received');
+          console.log(`   - Profile ID: ${profile.id}`);
+          console.log(`   - Email: ${profile.emails?.[0]?.value}`);
+
           // Check if user already exists
+          console.log('   Starting User.findOne...');
           let user = await User.findOne({
             where: { email: profile.emails[0].value }
           });
+          console.log(`   User found: ${!!user}`);
 
           if (user) {
             // Update Google ID if not set
             if (!user.googleId) {
+              console.log('   Updating existing user with Google ID...');
               user.googleId = profile.id;
               await user.save();
             }
@@ -48,15 +54,18 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
           }
 
           // Create new user
+          console.log('   Creating new user...');
           user = await User.create({
             googleId: profile.id,
             name: profile.displayName,
             email: profile.emails[0].value,
             password: Math.random().toString(36).slice(-8), // Random password for Google users
           });
+          console.log('   User created successfully.');
 
           done(null, user);
         } catch (error) {
+          console.error('❌ Google Strategy Error:', error);
           done(error, null);
         }
       }
