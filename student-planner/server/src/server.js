@@ -24,6 +24,9 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust proxy - required for Render and other reverse proxies
+app.set('trust proxy', 1);
+
 // CORS configuration - MUST BE FIRST
 const allowedOrigins = [
   process.env.CORS_ORIGIN,
