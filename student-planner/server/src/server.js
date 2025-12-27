@@ -1,14 +1,15 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
-const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 const passport = require('./config/passport');
 
-dotenv.config();
 
 // Validate critical environment variables in production
 if (process.env.NODE_ENV === 'production') {
@@ -35,7 +36,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, Postman, or server-side requests)
     if (!origin) return callback(null, true);
-    
+
     // Allow if origin is in the allowed list
     if (allowedOrigins.some(allowedOrigin => origin === allowedOrigin)) {
       callback(null, true);
@@ -101,8 +102,8 @@ app.use(passport.session());
 
 // Routes
 app.get('/', (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: 'Student Planner API is running',
     version: '2.0.0'
   });
