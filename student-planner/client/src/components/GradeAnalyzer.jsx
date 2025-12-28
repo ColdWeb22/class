@@ -153,7 +153,7 @@ Recommended Grade Path:
 
                     {!result.success && (
                         <p className="text-center text-red-400 mt-4 text-sm">
-                            Even with all A's (or max grades), the target cannot be reached? Or loop limit reached.
+                            Even with all A's (or max grades), the target cannot be reached. Or loop limit reached.
                         </p>
                     )}
 
