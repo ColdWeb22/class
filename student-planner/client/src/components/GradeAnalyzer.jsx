@@ -20,13 +20,16 @@ const GradeAnalyzer = () => {
                 targetSemesterGPA: parseFloat(targetGPA)
             });
             // Backend returns { success, data: { achievedGPA, gradeCombination, isAchievable } }
+            console.log('Raw API Response:', response);
             const apiResponse = response.data || response;
-            // Flatten the structure for easier access in the component
+            console.log('API Response data:', apiResponse);
+            
+            // Handle the nested structure from backend
             const resultData = {
                 success: apiResponse.success,
-                achievedGPA: apiResponse.data?.achievedGPA,
-                gradeCombination: apiResponse.data?.gradeCombination,
-                isAchievable: apiResponse.data?.isAchievable
+                achievedGPA: apiResponse.data?.achievedGPA || apiResponse.achievedGPA,
+                gradeCombination: apiResponse.data?.gradeCombination || apiResponse.gradeCombination,
+                isAchievable: apiResponse.data?.isAchievable || apiResponse.isAchievable
             };
             setResult(resultData);
             console.log('Grade analysis result:', resultData);
