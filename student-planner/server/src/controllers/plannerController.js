@@ -147,12 +147,13 @@ const analyzeGradeCombinations = async (req, res, next) => {
             iterations++;
         }
 
+        const isAchievable = currentGPA >= targetSemesterGPA;
         res.json({
-            success: true,
+            success: isAchievable,
             data: {
                 achievedGPA: parseFloat(currentGPA.toFixed(2)),
                 gradeCombination: currentConfig,
-                isAchievable: currentGPA >= targetSemesterGPA
+                isAchievable: isAchievable
             }
         });
     } catch (error) {
