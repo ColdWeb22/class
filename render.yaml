@@ -10,6 +10,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_OPTIONS
+        value: --dns-result-order=ipv4first
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
@@ -27,7 +29,7 @@ services:
       - key: GOOGLE_CALLBACK_URL
         value: https://student-planner-api.onrender.com/api/auth/google/callback
       - key: DATABASE_URL
-        value: postgresql://postgres.ncuanobkrkufelsrnqxc:Oladapo%40123@aws-1-eu-central-2.pooler.supabase.com:6543/postgres
+        sync: false
 
   - type: web
     name: student-planner-client

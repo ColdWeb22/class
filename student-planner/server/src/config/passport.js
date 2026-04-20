@@ -65,7 +65,8 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 
           done(null, user);
         } catch (error) {
-          console.error('❌ Google Strategy Error:', error);
+          console.error('❌ Google Strategy Error:', error.message);
+          console.error('   Stack:', error.stack);
           done(error, null);
         }
       }

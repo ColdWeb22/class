@@ -133,12 +133,26 @@ const updateProfile = async (req, res, next) => {
 // Google OAuth callback
 const googleCallback = async (req, res) => {
   try {
+    // Validate that Passport authenticated the user
+    if (!req.user) {
+      console.error('❌ Google Callback: No user found in request');
+      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+      return res.redirect(`${frontendURL}/login?error=authentication_failed`);
+    }
+
+    console.log(`✅ Google Callback: User authenticated - ${req.user.email}`);
     const token = generateToken(req.user.id);
-    // Redirect to frontend with token
+    
+    // Redirect to frontend GoogleCallback page with token
     const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
-    res.redirect(`${frontendURL}/?googleToken=${token}`);
+    const callbackURL = `${frontendURL}/auth/google/callback?googleToken=${token}`;
+    
+    console.log(`📍 Redirecting to: ${callbackURL}`);
+    res.redirect(callbackURL);
   } catch (error) {
-    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=authentication_failed`);
+    console.error('❌ Google Callback Error:', error);
+    const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendURL}/login?error=authentication_failed`);
   }
 };
 
