@@ -7,6 +7,11 @@ import { Link } from 'react-router-dom';
 import { CardSkeleton } from '../components/Loading';
 import { getGPAColor, getGPAStatus } from '../utils/calculations';
 
+const toSafeNumber = (value, fallback = 0) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+};
+
 const Dashboard = () => {
   const { user, isAuthenticated } = useAuth();
   const [semesters, setSemesters] = useState([]);
@@ -34,17 +39,18 @@ const Dashboard = () => {
       ]);
 
       if (semestersRes.success) {
-        setSemesters(semestersRes.data);
+        const semesterList = Array.isArray(semestersRes.data) ? semestersRes.data : [];
+        setSemesters(semesterList);
         
-        const totalCourses = semestersRes.data.reduce((sum, sem) => 
+        const totalCourses = semesterList.reduce((sum, sem) => 
           sum + (sem.Courses?.length || 0), 0
         );
         
         setStats({
-          totalSemesters: semestersRes.data.length,
+          totalSemesters: semesterList.length,
           totalCourses,
-          currentGPA: profileRes.data?.current_cgpa || 0,
-          targetGPA: profileRes.data?.target_cgpa || 4.0
+          currentGPA: toSafeNumber(profileRes.data?.current_cgpa, 0),
+          targetGPA: toSafeNumber(profileRes.data?.target_cgpa, 4.0)
         });
       }
     } catch {
@@ -98,7 +104,7 @@ const Dashboard = () => {
             <span className="text-sm text-text-muted">Current</span>
           </div>
           <div className={`text-3xl font-bold mb-1 ${getGPAColor(stats.currentGPA)}`}>
-            {stats.currentGPA.toFixed(2)}
+            {toSafeNumber(stats.currentGPA, 0).toFixed(2)}
           </div>
           <div className="text-sm text-text-muted">{getGPAStatus(stats.currentGPA)}</div>
         </div>
@@ -108,7 +114,7 @@ const Dashboard = () => {
             <Target className="text-secondary" size={24} />
             <span className="text-sm text-text-muted">Target</span>
           </div>
-          <div className="text-3xl font-bold mb-1">{stats.targetGPA.toFixed(2)}</div>
+          <div className="text-3xl font-bold mb-1">{toSafeNumber(stats.targetGPA, 4.0).toFixed(2)}</div>
           <div className="text-sm text-text-muted">Goal GPA</div>
         </div>
 
@@ -163,11 +169,11 @@ const Dashboard = () => {
                     {semester.status}
                   </span>
                 </div>
-                {semester.actual_gpa && (
+                {semester.actual_gpa !== null && semester.actual_gpa !== undefined && (
                   <div className="mt-2">
                     <span className="text-sm text-text-muted">GPA: </span>
-                    <span className={`text-lg font-bold ${getGPAColor(semester.actual_gpa)}`}>
-                      {semester.actual_gpa.toFixed(2)}
+                    <span className={`text-lg font-bold ${getGPAColor(toSafeNumber(semester.actual_gpa, 0))}`}>
+                      {toSafeNumber(semester.actual_gpa, 0).toFixed(2)}
                     </span>
                   </div>
                 )}
