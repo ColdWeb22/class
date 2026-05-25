@@ -32,9 +32,11 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     passport.authenticate('google', { scope: ['profile', 'email'] })
   );
 
+  // On failure, redirect to the frontend login page (not backend) so the client app can handle UI/errors.
+  const frontendLogin = (process.env.FRONTEND_URL || 'http://localhost:5173') + '/login';
   router.get('/google/callback',
     passport.authenticate('google', { 
-      failureRedirect: '/login',
+      failureRedirect: frontendLogin,
       session: false 
     }),
     googleCallback

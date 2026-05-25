@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "post apiauthregister with valid data",
+    "description": "Test user registration with valid name, email, and password to receive 201 status and created user id."
+  },
+  {
+    "id": "TC002",
+    "title": "post apiauthlogin with correct credentials",
+    "description": "Test user login with correct email and password to receive 200 status and JWT token."
+  },
+  {
+    "id": "TC003",
+    "title": "get apiauthprofile with valid token",
+    "description": "Test retrieving authenticated user profile with valid JWT token to receive 200 status and user profile data."
+  },
+  {
+    "id": "TC004",
+    "title": "post apisemesters with valid data and token",
+    "description": "Test creating a semester with valid name, level, and status using valid JWT token to receive 201 status and semester object including id."
+  },
+  {
+    "id": "TC005",
+    "title": "put apisemestersid with updated data and token",
+    "description": "Test updating an existing semester with valid data and JWT token to receive 200 status and updated semester data."
+  },
+  {
+    "id": "TC006",
+    "title": "post apisemesterssemesteridcourses with valid data and token",
+    "description": "Test adding a course to a semester with valid name, credits, and grade using valid JWT token to receive 201 status and course object."
+  },
+  {
+    "id": "TC007",
+    "title": "post apiplannercalculategpa with valid inputs",
+    "description": "Test calculating required GPA to reach target CGPA with valid currentCGPA, completedCredits, targetCGPA, and courses list to receive 200 status with requiredGPA, feasibility, and breakdown."
+  },
+  {
+    "id": "TC008",
+    "title": "post apiplannerplanstudy with valid inputs",
+    "description": "Test planning study hours with valid targetGPA, availableHours, and courses list to receive 200 status with recommended schedule and total hours."
+  },
+  {
+    "id": "TC009",
+    "title": "post apiplanneranalyzegrades with valid inputs",
+    "description": "Test analyzing grade combinations with valid targetGPA and courses list to receive 200 status with recommendations and feasibility."
+  },
+  {
+    "id": "TC010",
+    "title": "get apiauthprofile without token",
+    "description": "Test accessing user profile endpoint without authentication token to receive 401 unauthorized error."
+  }
+]

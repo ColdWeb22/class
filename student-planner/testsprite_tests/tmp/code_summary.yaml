@@ -1,0 +1,98 @@
+project_name: student-planner
+description: >
+  A full-stack academic planner web application that helps university students
+  manage semesters, track courses/grades, calculate CGPA, plan study hours,
+  analyze grade combinations, and visualize academic performance.
+
+tech_stack:
+  frontend:
+    framework: React 19
+    build_tool: Vite 7
+    styling: TailwindCSS 4
+    routing: React Router DOM 7
+    state_management: React Context API (AuthContext, ThemeContext, HistoryContext)
+    charts: Recharts 3
+    icons: Lucide React
+    notifications: React Hot Toast
+    export: jsPDF, jsPDF-AutoTable, PapaParse
+    port: 5173
+    entry: client/src/main.jsx
+
+  backend:
+    runtime: Node.js
+    framework: Express 5
+    orm: Sequelize 6
+    authentication: JWT (jsonwebtoken), Passport.js (Google OAuth 2.0)
+    security: Helmet, express-rate-limit, bcryptjs, express-validator
+    databases:
+      - sqlite3 (development)
+      - PostgreSQL via pg (production)
+    port: 5000
+    entry: server/src/server.js
+
+features:
+  - name: User Authentication
+    description: Register/login with email+password (JWT), Google OAuth 2.0 login
+    routes:
+      - POST /api/auth/register
+      - POST /api/auth/login
+      - GET /api/auth/google
+      - GET /api/auth/google/callback
+      - GET /api/auth/profile
+      - PUT /api/auth/profile
+
+  - name: Semester Management
+    description: Full CRUD for academic semesters (each semester has a name, level, GPA)
+    routes:
+      - GET /api/semesters
+      - POST /api/semesters
+      - GET /api/semesters/:id
+      - PUT /api/semesters/:id
+      - DELETE /api/semesters/:id
+
+  - name: Course Management
+    description: Add, update, delete courses within a semester; courses have name, credit units, grade
+    routes:
+      - POST /api/semesters/:semesterId/courses
+      - PUT /api/semesters/courses/:courseId
+      - DELETE /api/semesters/courses/:courseId
+
+  - name: CGPA Planner
+    description: Calculates required GPA to achieve target cumulative GPA
+    routes:
+      - POST /api/planner/calculate-gpa
+    frontend_page: /planner/gpa
+
+  - name: Study Hours Planner
+    description: Recommends study hours allocation based on course difficulty and credit units
+    routes:
+      - POST /api/planner/plan-study
+    frontend_page: /planner/study
+
+  - name: Grade Analyzer
+    description: Analyzes possible grade combinations and their impact on GPA
+    routes:
+      - POST /api/planner/analyze-grades
+    frontend_page: /planner/grades
+
+  - name: Data Visualization
+    description: Charts and graphs showing GPA trends, grade distribution, and credit loads
+    frontend_page: /insights
+
+  - name: Comparison Tool
+    description: Compare semester or course performance side-by-side
+    frontend_page: /planner/comparison
+
+  - name: Dashboard
+    description: Overview of CGPA, recent semesters, and quick stats
+    frontend_page: /dashboard
+
+  - name: Profile Management
+    description: View and update user profile (name, email, university, department)
+    frontend_page: /profile
+    routes:
+      - GET /api/auth/profile
+      - PUT /api/auth/profile
+
+api_base_url: http://localhost:5000
+frontend_base_url: http://localhost:5173
