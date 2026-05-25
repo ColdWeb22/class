@@ -4,6 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../config/api';
 import toast from 'react-hot-toast';
 
+const toSafeNumber = (value, fallback = 0) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+};
+
 const Profile = () => {
   const { user, updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -102,7 +107,7 @@ const Profile = () => {
         <div className="space-y-3 text-sm">
           <div className="flex justify-between">
             <span className="text-text-muted">Current CGPA</span>
-            <span className="font-medium">{user?.current_cgpa?.toFixed(2) || '0.00'}</span>
+            <span className="font-medium">{toSafeNumber(user?.current_cgpa, 0).toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-text-muted">Credits Completed</span>

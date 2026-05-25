@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
                         alt="Study Planner Logo" 
                         className="w-10 h-10 rounded-lg object-contain"
                     />
-                    <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+                    <h1 className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-white/70">
                         Study<br />Planner
                     </h1>
                 </div>

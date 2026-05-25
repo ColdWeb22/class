@@ -7,6 +7,11 @@ import { CardSkeleton } from '../components/Loading';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { getGPAColor } from '../utils/calculations';
 
+const toSafeNumber = (value, fallback = 0) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+};
+
 const Semesters = () => {
   const navigate = useNavigate();
   const [semesters, setSemesters] = useState([]);
@@ -119,7 +124,7 @@ const Semesters = () => {
                 {semester.target_gpa && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-text-muted">Target GPA</span>
-                    <span className="font-semibold">{semester.target_gpa.toFixed(2)}</span>
+                    <span className="font-semibold">{toSafeNumber(semester.target_gpa, 0).toFixed(2)}</span>
                   </div>
                 )}
                 
@@ -129,8 +134,8 @@ const Semesters = () => {
                       <TrendingUp size={14} />
                       Actual GPA
                     </span>
-                    <span className={`text-lg font-bold ${getGPAColor(semester.actual_gpa)}`}>
-                      {semester.actual_gpa.toFixed(2)}
+                    <span className={`text-lg font-bold ${getGPAColor(toSafeNumber(semester.actual_gpa, 0))}`}>
+                      {toSafeNumber(semester.actual_gpa, 0).toFixed(2)}
                     </span>
                   </div>
                 )}
