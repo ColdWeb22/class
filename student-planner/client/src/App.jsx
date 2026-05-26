@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { HistoryProvider } from './context/HistoryContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import { LoadingOverlay } from './components/Loading';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -24,9 +25,11 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    console.info('[auth] protected route waiting for session');
+    return <LoadingOverlay message="Checking your session..." />;
   }
   
+  console.info('[auth] protected route decision', { isAuthenticated });
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
@@ -52,7 +55,7 @@ function AppRoutes() {
       <Route path="/insights" element={<Layout><DataVisualization /></Layout>} />
       
       {/* Catch all */}
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to="/planner/gpa" replace />} />
     </Routes>
   );
 }
