@@ -11,6 +11,7 @@ const GoogleCallback = () => {
   const handledRef = useRef(false);
   const [status, setStatus] = useState('Completing sign in...');
   const [errorMessage, setErrorMessage] = useState('');
+  const [redirectTo, setRedirectTo] = useState('');
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -50,7 +51,7 @@ const GoogleCallback = () => {
             login(response.data, token);
             console.info('[auth] callback profile loaded, redirecting to dashboard');
             toast.success('Welcome! You\'re now signed in.');
-            navigate('/dashboard', { replace: true });
+            setRedirectTo('/dashboard');
           } else {
             throw new Error('Failed to fetch profile');
           }
@@ -65,16 +66,29 @@ const GoogleCallback = () => {
       } else if (isAuthenticated) {
         handledRef.current = true;
         // Already authenticated, go to dashboard
-        navigate('/dashboard', { replace: true });
+        setRedirectTo('/dashboard');
       } else {
         handledRef.current = true;
         // No token and not authenticated, show home page (CGPA Planner)
-        navigate('/planner/gpa', { replace: true });
+        setRedirectTo('/planner/gpa');
       }
     };
 
     handleCallback();
   }, [searchParams, navigate, login, isAuthenticated]);
+
+  useEffect(() => {
+    if (!redirectTo) {
+      return;
+    }
+
+    if (redirectTo === '/dashboard' && !isAuthenticated) {
+      return;
+    }
+
+    console.info('[auth] callback redirecting', { redirectTo, isAuthenticated });
+    navigate(redirectTo, { replace: true });
+  }, [redirectTo, isAuthenticated, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
