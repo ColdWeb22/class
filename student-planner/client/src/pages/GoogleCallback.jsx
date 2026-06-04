@@ -34,6 +34,11 @@ const createFallbackUser = (token) => {
   };
 };
 
+const getHashParam = (name) => {
+  const hash = window.location.hash.replace(/^#\??/, '');
+  return new URLSearchParams(hash).get(name);
+};
+
 const GoogleCallback = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -49,8 +54,8 @@ const GoogleCallback = () => {
         return;
       }
 
-      const token = searchParams.get('token') || searchParams.get('googleToken');
-      const error = searchParams.get('error');
+      const token = searchParams.get('token') || searchParams.get('googleToken') || getHashParam('googleToken');
+      const error = searchParams.get('error') || getHashParam('error');
       console.info('[auth] callback loaded', { hasToken: !!token, hasError: !!error, isAuthenticated });
 
       if (error) {

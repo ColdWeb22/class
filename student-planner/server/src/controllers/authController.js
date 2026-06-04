@@ -143,11 +143,13 @@ const googleCallback = async (req, res) => {
     console.log(`✅ Google Callback: User authenticated - ${req.user.email}`);
     const token = generateToken(req.user.id);
     
-    // Redirect to frontend GoogleCallback page with URL-encoded token
+    // Redirect to the frontend root with the token in the URL fragment. The root
+    // path is the most reliable static-host entry point, and fragments are not
+    // sent to the static host or logged in HTTP request lines.
     const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
-    const callbackURL = `${frontendURL}/auth/google/callback?googleToken=${encodeURIComponent(token)}`;
+    const callbackURL = `${frontendURL}/#googleToken=${encodeURIComponent(token)}`;
 
-    console.log(`📍 Redirecting to: ${callbackURL}`);
+    console.log('📍 Redirecting to frontend OAuth completion page');
     res.redirect(callbackURL);
   } catch (error) {
     console.error('❌ Google Callback Error:', error);
