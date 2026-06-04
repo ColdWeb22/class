@@ -28,7 +28,10 @@ export const apiClient = {
             window.location.href = '/login';
           }
         }
-        throw new Error(data.error || 'Something went wrong');
+        const error = new Error(data.error || 'Something went wrong');
+        error.status = response.status;
+        error.data = data;
+        throw error;
       }
 
       return data;

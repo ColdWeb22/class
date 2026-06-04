@@ -30,3 +30,4 @@ router.route('/courses/:courseId')
   .delete(deleteCourse);
 
 module.exports = router;
+ 

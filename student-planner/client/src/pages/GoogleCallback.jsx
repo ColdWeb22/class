@@ -4,6 +4,36 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { apiClient } from '../config/api';
 
+const decodeJwtPayload = (token) => {
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) {
+      return {};
+    }
+
+    const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const paddedPayload = normalizedPayload.padEnd(
+      normalizedPayload.length + ((4 - (normalizedPayload.length % 4)) % 4),
+      '='
+    );
+
+    return JSON.parse(atob(paddedPayload));
+  } catch (error) {
+    console.warn('[auth] failed to decode callback token', error);
+    return {};
+  }
+};
+
+const createFallbackUser = (token) => {
+  const payload = decodeJwtPayload(token);
+
+  return {
+    id: payload.id || payload.sub || 'google-user',
+    name: 'Student',
+    email: '',
+  };
+};
+
 const GoogleCallback = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -33,36 +63,35 @@ const GoogleCallback = () => {
 
       if (token) {
         handledRef.current = true;
-        try {
-          console.info('[auth] callback received token, fetching profile');
-          setStatus('Verifying your account...');
-          localStorage.setItem('token', token);
-          
-          const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Authentication timed out. Please try again.')), 15000);
-          });
+        console.info('[auth] callback received token, saving session');
+        setStatus('Taking you to your dashboard...');
+        localStorage.setItem('token', token);
+        login(createFallbackUser(token), token);
+        setRedirectTo('/dashboard');
 
-          const response = await Promise.race([
-            apiClient.get('/api/auth/profile'),
-            timeoutPromise,
-          ]);
-          
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Authentication timed out. Please try again.')), 15000);
+        });
+
+        Promise.race([
+          apiClient.get('/api/auth/profile'),
+          timeoutPromise,
+        ]).then((response) => {
           if (response.success) {
             login(response.data, token);
-            console.info('[auth] callback profile loaded, redirecting to dashboard');
+            console.info('[auth] callback profile loaded');
             toast.success('Welcome! You\'re now signed in.');
-            setRedirectTo('/dashboard');
-          } else {
-            throw new Error('Failed to fetch profile');
           }
-        } catch (error) {
+        }).catch((error) => {
           console.error('Callback error:', error);
           console.info('[auth] callback failed', { message: error?.message });
-          setErrorMessage(error.message || 'Authentication failed. Please try again.');
-          setStatus('Sign in could not be completed.');
-          toast.error('Authentication failed. Please try again.');
-          localStorage.removeItem('token');
-        }
+          if (error?.status === 401) {
+            setErrorMessage(error.message || 'Authentication failed. Please try again.');
+            setStatus('Sign in could not be completed.');
+            toast.error('Authentication failed. Please try again.');
+            localStorage.removeItem('token');
+          }
+        });
       } else if (isAuthenticated) {
         handledRef.current = true;
         // Already authenticated, go to dashboard
