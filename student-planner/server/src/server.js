@@ -106,10 +106,12 @@ app.get('/', (req, res) => {
 });
 
 const authRoutes = require('./routes/authRoutes');
+const healthRoutes = require('./routes/healthRoutes');
 const plannerRoutes = require('./routes/plannerRoutes');
 const semesterRoutes = require('./routes/semesterRoutes');
 
 app.use('/api/auth', authRoutes);
+app.use('/api/health', healthRoutes);
 app.use('/api/planner', plannerRoutes);
 app.use('/api/semesters', semesterRoutes);
 

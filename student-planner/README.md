@@ -156,6 +156,12 @@ If you need to customize, edit [`render.yaml`](render.yaml):
 - Update service names
 - Modify build/start commands
 
+### Supabase Keepalive
+
+The backend exposes `GET /api/health/supabase`, which runs a tiny `SELECT 1` database query. A GitHub Actions workflow at `.github/workflows/supabase-keepalive.yml` calls this endpoint every day so the Supabase project continues receiving database traffic.
+
+By default the workflow pings `https://student-planner-api.onrender.com/api/health/supabase`. If your deployed API URL changes, add a GitHub Actions repository variable named `KEEPALIVE_URL` with the full health URL.
+
 ## Project Structure
 
 ```
