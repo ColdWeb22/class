@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -58,13 +57,6 @@ const Login = () => {
           <p>✓ Secure authentication</p>
           <p>✓ Quick access to your planner</p>
         </div>
-
-        <p className="text-center mt-6 text-text-muted">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-primary hover:underline">
-            Sign up
-          </Link>
-        </p>
       </div>
     </div>
   );
